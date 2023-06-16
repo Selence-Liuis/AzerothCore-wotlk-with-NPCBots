@@ -65,7 +65,7 @@ struct DefaultTargetSelector : public Acore::unary_function<Unit*, bool>
         if (target == except)
             return false;
 
-        if (m_playerOnly && (target->GetTypeId() != TYPEID_PLAYER))
+        if (m_playerOnly && !(target->IsPlayer() || target->IsNPCBot()))
             //npcbot: allow to target bots
             //if (!(target->IsNPCBot()))
             //end npcbot
@@ -140,7 +140,7 @@ struct PowerUsersSelector : public Acore::unary_function<Unit*, bool>
         if (target->getPowerType() != _power)
             return false;
 
-        if (_playerOnly && target->GetTypeId() != TYPEID_PLAYER)
+        if (_playerOnly && !(target->IsPlayer() || target->IsNPCBot()))
             return false;
 
         if (_dist > 0.0f && !_me->IsWithinCombatRange(target, _dist))
@@ -162,7 +162,7 @@ struct FarthestTargetSelector : public Acore::unary_function<Unit*, bool>
         if (!_me || !target)
             return false;
 
-        if (_playerOnly && target->GetTypeId() != TYPEID_PLAYER)
+        if (_playerOnly && !(target->IsPlayer() || target->IsNPCBot()))
             return false;
 
         if (_dist > 0.0f && !_me->IsWithinCombatRange(target, _dist))
@@ -356,7 +356,7 @@ public:
     // Called at any Damage from any attacker (before damage apply)
     // Note: it for recalculation damage or special reaction at damage
     // for attack reaction use AttackedBy called for not DOT damage in Unit::DealDamage also
-    virtual void DamageTaken(Unit* /*attacker*/, uint32& /*damage*/, DamageEffectType /*damagetype*/, SpellSchoolMask /*damageSchoolMask*/ ) {}
+    virtual void DamageTaken(Unit* /*attacker*/, uint32& /*damage*/, DamageEffectType /*damagetype*/, SpellSchoolMask /*damageSchoolMask*/) {}
 
     // Called when the creature receives heal
     virtual void HealReceived(Unit* /*done_by*/, uint32& /*addhealth*/) {}
@@ -420,7 +420,7 @@ class SimpleCharmedAI : public PlayerAI
 {
 public:
     void UpdateAI(uint32 diff) override;
-    SimpleCharmedAI(Player* player): PlayerAI(player) {}
+    SimpleCharmedAI(Player* player) : PlayerAI(player) {}
 };
 
 #endif
