@@ -1090,6 +1090,7 @@ void bot_ai::BotMovement(BotMovementType type, Position const* pos, Unit* target
     if (!mover)
         return;
 
+    mover->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_MOVE);
     switch (type)
     {
         case BOT_MOVE_CHASE:
